@@ -51,9 +51,8 @@ def main_api(user:str, site:str, force_not_cache:bool, time:float, use_media:boo
                 use_media=use_media, high_quality=True, timeout=time)
     elif site == "bsky":
         url = "https://bsky.app/profile/" + user
-        if info_type != Info_type.IMAGES:
-            logging.warning("Only images have been implemented for bsky backend!")
-        info_type = Info_type.IMAGES
+        if info_type == Info_type.FOLLOWERS:
+            logging.warning("Can't get followers, since it is not implemented for bsky backend yet!")
         context = bsky_context(user, info_type=info_type, 
                 use_media=use_media, high_quality=True, timeout=time)
         cookie_path = "" # bsky doesnt require cookies
@@ -81,7 +80,7 @@ def main_api(user:str, site:str, force_not_cache:bool, time:float, use_media:boo
             logging.info(f"Finished downloading images.")
         else:
             if user == "": user = "home"
-            out_file = os.path.join(out_path, f"{data_type}_{user}.json") 
+            out_file = os.path.join(out_path, f"{data_type}_{site}_{user}.json") 
             logging.info(f"Outputing to: {out_file}")
             with open(out_file, "w") as file:
                 now = strftime("%H:%M:%S-%d/%m/%Y")
