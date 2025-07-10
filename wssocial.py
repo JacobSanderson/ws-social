@@ -36,6 +36,8 @@ def main_api(user:str, site:str, force_not_cache:bool, time:float, use_media:boo
         info_type = Info_type.IMAGES
     elif data_type == "followers":
         info_type = Info_type.FOLLOWERS
+    elif data_type == "bookmarks":
+        info_type = Info_type.BOOKMARKS
     else:
         logging.error(f"Can't get '{data_type}', has not been implemented/doesn't exist!")
         return 1
@@ -47,6 +49,9 @@ def main_api(user:str, site:str, force_not_cache:bool, time:float, use_media:boo
         if info_type == Info_type.FOLLOWERS:
             if user != "": url += "/"
             url += "following"
+        if info_type == Info_type.BOOKMARKS:
+            url = "https://x.com/i/bookmarks"
+            user = ""
         context = twitter_context(user, info_type=info_type, 
                 use_media=use_media, high_quality=True, timeout=time)
     elif site == "bsky":
@@ -103,7 +108,7 @@ if __name__ == "__main__":
     parser.add_argument('-f', '--force', default=False, action='store_true', help="Force download all tweets/images, instead of using cache.")
     parser.add_argument('-t', '--time', default=10*60., type=float, help="Maximum time the program will use to download data.") 
     parser.add_argument('-m', '--media', default=True, action='store_true', help="Use media tab when getting images.") 
-    parser.add_argument('-g', '--get', default="tweets", type=str, choices=["tweets", "images", "followers"], help="What type of data to download.") 
+    parser.add_argument('-g', '--get', default="tweets", type=str, choices=["tweets", "images", "followers", "bookmarks"], help="What type of data to download.") 
     parser.add_argument('-s', '--site', default="twitter", type=str, choices=["twitter", "bsky"], help="Which site to download the data from") 
     args = parser.parse_args()
 

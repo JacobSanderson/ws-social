@@ -166,10 +166,7 @@ def find_images_post(page_source:str, author_filter:str) -> list[str]:
             continue
         # Fill data
         posible_owners = [str(o.get("href")[1:]) for o in a_tags]
-        if len(posible_owners) <= 2:
-            owner = posible_owners[0]
-        else:
-            owner = posible_owners[1]
+        owner = posible_owners[0] if len(posible_owners) <= 2 else posible_owners[1]
         images_tags = soup.find_all("img")
         for img in images_tags:
             src = str(img.get("src"))
@@ -218,6 +215,9 @@ class twitter_context(socialmedia_context):
                 f = find_images_post
                 args = (self.user, )
         elif self.info_type == Info_type.TWEETS:
+            f = find_tweets
+        elif self.info_type == Info_type.BOOKMARKS:
+            # It is fundamentally the same if getting from home page, than with bookmarks page
             f = find_tweets
         elif self.info_type == Info_type.FOLLOWERS:
             f = find_following_users

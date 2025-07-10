@@ -15,6 +15,7 @@ class Info_type(Enum):
     IMAGES = 0
     TWEETS = 1
     FOLLOWERS = 2
+    BOOKMARKS = 4
 
 @dataclasses.dataclass
 class socialmedia_context:
